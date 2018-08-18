@@ -1,0 +1,6 @@
+version: v1.0.0
+
+steps:
+  - id: build-hello-world
+    run: build -t {{.Run.Registry}}/hello-world:{{.Build.ID}} -t {{.Run.Registry}}/hello-world:latest .
+    
