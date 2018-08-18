@@ -1,0 +1,31 @@
+version: 1.0.0
+steps:
+  - id: my-WebSite
+   build: |
+      -t {{.Build.Registry}}/functions/addemup:latest 
+      -t {{.Build.Registry}}/functions/addemup:{{.Build.ID}} 
+      -t gcr.io/project/functions/addemup:latest
+      ./website/
+  - id: build-funcTest
+    build: |
+      -t funcTest
+      ./tests/
+      --no-push
+  - id: run-funcTest
+    when: ['my-WebSite', 'build-funcTest']
+    run: {{.Build.Registry}}/functions/addemup:{{.Build.ID}} -P
+    run: funcTest |
+      -e {{.Run.Containers.run-funcTest.IP}}
+  - id: 
+    push: 
+    {{.Build.Registry}}/functions/addemup:latest 
+    *
+  - id: helm-FuncTest
+    when: ['run-funcTest']
+
+    run: helm deploy 
+    when: registry.webhook fired
+push:
+  *
+
+

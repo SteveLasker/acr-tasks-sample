@@ -1,0 +1,10 @@
+version: v1.0.0
+
+steps:
+  - id: bash
+    run: bash ls
+  - run: {{.Run.Registry}}addemup 
+  - run: helm deploy 
+  - run: helm update ./fofda -n mydeploy
+  - run: mcr.microsoft.com/azure-cli:v1 acr build  
+
